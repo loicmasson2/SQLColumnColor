@@ -20,30 +20,28 @@ export function activate(context: vscode.ExtensionContext) {
   const document = vscode.window.activeTextEditor?.document;
 
   const numberLines = document?.lineCount;
-  const test = vscode.window.createTextEditorDecorationType({
-    backgroundColor: "red",
-  });
+
   const palette = [
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#605B56",
+      color: "#605B56",
     }),
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#837A75",
+      color: "#837A75",
     }),
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#DAFEB7",
+      color: "#DAFEB7",
     }),
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#F2FBE0",
+      color: "#F2FBE0",
     }),
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#241023",
+      color: "#241023",
     }),
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#6B0504",
+      color: "#6B0504",
     }),
     vscode.window.createTextEditorDecorationType({
-      backgroundColor: "#ACC18A",
+      color: "#ACC18A",
     }),
   ];
 
@@ -71,7 +69,6 @@ export function activate(context: vscode.ExtensionContext) {
     let matchesForFields = regExp.exec(
       document?.lineAt(linesWithInsert[0]).text
     );
-    console.log("COUCOUCOU");
 
     if (matchesForFields) {
       const fieldsWithoutBackQuote = matchesForFields[1]
@@ -79,21 +76,14 @@ export function activate(context: vscode.ExtensionContext) {
         .replace(/ /g, "");
       const fieldsInOneArray = fieldsWithoutBackQuote.split(",");
 
-      // const rangeFieldOne = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[0], currentLine);
-      // const rangeFieldTwo = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[1], currentLine);
-      // const rangeFieldThird = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[2], currentLine);
-      // const rangeFieldFour = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[3], currentLine);
-      // const rangeFieldFive = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[4], currentLine);
-      // const rangeFieldSix = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[5], currentLine);
-      // const rangeFieldSeven = getRangeForWordInLine(document?.lineAt(linesWithInsert[0]).text, fieldsInOneArray[6], currentLine);
-
       const rangeArrayForColoring: vscode.Range[][] = [];
       for (var i = 0; i < fieldsInOneArray.length; i++) {
         rangeArrayForColoring.push([
           getRangeForWordInLine(
             document?.lineAt(linesWithInsert[0]).text,
             fieldsInOneArray[i],
-            linesWithInsert[0]
+            linesWithInsert[0],
+            0
           ),
         ]);
       }
@@ -103,70 +93,54 @@ export function activate(context: vscode.ExtensionContext) {
         currentLine < numberLines;
         currentLine++
       ) {
-        let matchesForValue = regExp.exec(
-          document?.lineAt(currentLine).text
-        );
+        let matchesForValue = regExp.exec(document?.lineAt(currentLine).text);
 
         if (matchesForValue) {
           const valuesWithoutDoubleQuote = matchesForValue[1].replace(/ /g, "");
 
           const valuesInOneArray = valuesWithoutDoubleQuote.split(",");
+          let previousPositionWord = 0;
           valuesInOneArray.forEach((elem, index) => {
             const rangeForWord = getRangeForWordInLine(
               document?.lineAt(currentLine).text,
               elem,
-              currentLine
+              currentLine,
+              previousPositionWord
             );
-            console.log(rangeForWord);
+            previousPositionWord = rangeForWord.end.character;
             rangeArrayForColoring[index].push(rangeForWord);
-            
-  
+
             if (valuesInOneArray.length !== fieldsInOneArray.length) {
               console.error(
                 "There is a mismatch between the number of fields to insert and the number of values sent"
               );
             }
-          })
-          
+          });
         } else {
           console.error("THere is not value after the insert");
         }
 
-        rangeArrayForColoring.forEach((elem,index) => {
+        rangeArrayForColoring.forEach((elem, index) => {
           vscode.window.activeTextEditor?.setDecorations(
             palette[index],
             rangeArrayForColoring[index]
           );
-        })
-       
+        });
       }
     } else {
       console.error("no values in the insert");
     }
   }
-
-  // console.log(vscode.window.activeTextEditor?.document.getWordRangeAtPosition(new vscode.Position(25,0), /(INSERT)/gm));
-
-  // });
-
-  // context.subscriptions.push(disposable);
-}
-
-// * DONT FORGET TO MAKE THIS FUNCTION WORK IF THERE IS SEVERAL INSTANCE OF THE SAME WORD IN THE SAME LINE
-function getPositionStartEndWord(textAtLine: string, word: string) {
-  return textAtLine.indexOf(word);
 }
 
 function getRangeForWordInLine(
   textAtLine: string,
   word: string,
-  line: number
+  line: number,
+  previousPositionWord: number
 ): vscode.Range {
-  const startPositionWord = getPositionStartEndWord(textAtLine, word);
+  const startPositionWord = textAtLine.indexOf(word, previousPositionWord);
   const endPositionWord = startPositionWord + word.length;
-  console.log(`start ${startPositionWord}`);
-  console.log(`end ${endPositionWord}`);
-
   const rangeForWord = new vscode.Range(
     new vscode.Position(line, startPositionWord),
     new vscode.Position(line, endPositionWord)
