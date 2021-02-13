@@ -1,65 +1,35 @@
-# sqlcolorcolumn README
+# SQLColorColumn 
 
-This is the README for your extension "sqlcolorcolumn". After writing up a brief description, we recommend including the following sections.
+Pair your fields and values with a specific colour in your SQL files.
 
-## Features
+# Install
+* Open Extensions sideBar panel in Visual Studio Code and choose the menu options for View -> Extensions
+* Search for SQLColorColumn
+* Click install
+* Click reload if required
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
-For example if there is an image subfolder under your extension project workspace:
+# Features
 
-\!\[feature X\]\(images/feature-x.png\)
+In an INSERT in your sql file, will pair a field and value.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+All the values will have the same colour has the field to help recognize it.
 
-## Requirements
+## Visuals
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![Example](./SQLColorColumn.png)
 
-## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## Roadmap
 
-For example:
+- make it work for more than one insert at the time
+- add more colours compatible with dark themes
+- add colours for light themes
+- measure and address performance issues for huge sql files
+- NICE TO HAVE: have legend in sidenav if you have a long INSERT and forget which field is for what
+- EXPERIMENT: if it would work better with the lines of code that are visible instead of the entire file
 
-This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## License
+https://choosealicense.com/licenses/mit/
