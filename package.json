@@ -3,6 +3,12 @@
 	"displayName": "SQLColorColumn",
 	"description": "Color the column and the value to facilitate identification.",
 	"version": "0.0.1",
+	"publisher": "loicmasson2",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/loicmasson2/SQLColumnColor"
+	},
 	"engines": {
 		"vscode": "^1.52.0"
 	},

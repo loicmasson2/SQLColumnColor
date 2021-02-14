@@ -17,7 +17,7 @@ All the values will have the same colour has the field to help recognize it.
 
 ## Visuals
 
-![Example](./SQLColorColumn.png)
+![Example](./resources/SQLColorColumn.png)
 
 
 ## Roadmap
