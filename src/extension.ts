@@ -116,12 +116,12 @@ export function activate(context: vscode.ExtensionContext) {
   }
 }
 
-function getRangeForWordInLine(
+const getRangeForWordInLine= (
   textAtLine: string,
   word: string,
   line: number,
   previousPositionWord: number
-): vscode.Range {
+): vscode.Range => {
   const startPositionWord = textAtLine.indexOf(word, previousPositionWord);
   const endPositionWord = startPositionWord + word.length;
   const rangeForWord = new vscode.Range(
