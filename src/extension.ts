@@ -1,11 +1,44 @@
 import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
+  let currOpenEditor = vscode.window.activeTextEditor;
+  if (currOpenEditor) {
+    colorColumn();
+    // In this example, we want to start watching the currently open doc
+    let currActiveDoc = currOpenEditor.document;
 
+    vscode.workspace.onDidChangeTextDocument(
+      (event: vscode.TextDocumentChangeEvent) => {
+        if (event.document === currActiveDoc) {
+          colorColumn();
+        } else {
+          console.log("Non watched doc changed");
+        }
+      }
+    );
+  }
+}
+
+const getRangeForWordInLine = (
+  textAtLine: string,
+  word: string,
+  line: number,
+  previousPositionWord: number
+): vscode.Range => {
+  const startPositionWord = textAtLine.indexOf(word, previousPositionWord);
+  const endPositionWord = startPositionWord + word.length;
+  const rangeForWord = new vscode.Range(
+    new vscode.Position(line, startPositionWord),
+    new vscode.Position(line, endPositionWord)
+  );
+  return rangeForWord;
+};
+
+const colorColumn = () => {
   const document = vscode.window.activeTextEditor?.document;
 
   const numberLines = document?.lineCount;
-  
+
   const palette = [
     vscode.window.createTextEditorDecorationType({
       color: "#118AB2",
@@ -37,6 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
   let linesWithInsert = [];
 
   if (document && numberLines) {
+
     for (let index = 0; index < numberLines; index++) {
       if (
         document.getWordRangeAtPosition(
@@ -114,19 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
       console.error("no values in the insert");
     }
   }
-}
+};
 
-const getRangeForWordInLine= (
-  textAtLine: string,
-  word: string,
-  line: number,
-  previousPositionWord: number
-): vscode.Range => {
-  const startPositionWord = textAtLine.indexOf(word, previousPositionWord);
-  const endPositionWord = startPositionWord + word.length;
-  const rangeForWord = new vscode.Range(
-    new vscode.Position(line, startPositionWord),
-    new vscode.Position(line, endPositionWord)
-  );
-  return rangeForWord;
+export function deactivate() {
 }
